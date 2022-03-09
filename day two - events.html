@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="jquery.min.js"></script>
+  <script>
+    $(function (param) { 
+      var btn = $(".mybtn");
+      btn.on('click',function (param) { 
+        // console.log('clicked!')
+        $("p").hide(5000,function (param) { 
+          alert('hided elememt');
+         });
+      })
+
+      $("a").on("click",function (e) { 
+        alert('Hi');
+        e.preventDefault();
+       })
+
+      $("#year").on('change',function (param) { 
+        var year = $(this).val();
+        if(year > 1){
+          $('#major').show();
+        }else{
+          $('#major').hide();
+        }
+       })
+
+      $("#myform").on('submit',function (e) { 
+        var err=false;
+
+        var username = $("#username").val();
+        if(username.length <= 5){
+          err = true;
+        }
+
+        // for phoneno
+
+        if(err){
+          e.preventDefault();
+        }
+       })
+
+       $("div.mydiv").on('click',function (e) { 
+          alert('clicked mydiv');
+        })
+
+        $("section").on('click',function (e) { 
+          alert('clicked section');
+        })
+    })
+
+    
+  </script>
+</head>
+<body>
+  <a href="https://google.com" target="_blank">Go Google</a>
+
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dignissimos? Expedita veniam debitis aspernatur enim nihil ea magnam vitae velit, voluptatem ab veritatis sunt nam rerum corporis nisi! Expedita, sunt!
+  </p>
+
+  <button class="mybtn">Click</button>
+
+  <section>
+    <div class="mydiv">This is my div.</div>
+    <form action="" id="myform">
+      <input type="text" name="username" placeholder="Username...." id="username"><br>
+      <input type="text" name="phoneno" placeholder="Phone No..." id="phoneno"><br>
+      <select name="year" id="year">
+        <optgroup label="Academic Year">
+          <option value="1">First Year</option>
+          <option value="2">Second Year</option>
+          <option value="3">Third Year</option>
+          <option value="4">Fourth Year</option>
+        </optgroup>
+      </select>
+
+      <div id="major" style="display: none;">
+        <input type="radio" name="major" checked="checked" value="ct"> CT
+        <input type="radio" name="major" value="cs"> CS
+      </div>
+
+      <br>
+      <button type="submit">Save</button>
+    </form>
+  </section>
+</body>
+</html>
