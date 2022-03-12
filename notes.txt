@@ -11,3 +11,9 @@ courses
 - JS    5000
 - Vue   5500
 
+
+Projects
+  - Tab + Shop (LS, SweetAlert)
+  - Memes (Ajax)
+  - Quotes (Ajax)
+  - All Countries (Ajax)

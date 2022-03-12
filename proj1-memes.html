@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memes API</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    div#memes {
+        /* margin: 4px 4px; */
+        padding: 4px;
+        background-color: #8a88ff;
+        width: 100%;
+        /* overflow: auto; */
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+    }
+
+    div#creator{
+      background-color: gray;
+      padding: 20px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-evenly;
+      flex-wrap: wrap;
+    }
+
+    #content > input[type="text"]{
+      width: 300px;
+      height: 50px;
+      margin: 5px 0;
+      padding: 5px;
+    }
+
+    #content #generate{
+      padding: 10px;
+      cursor: pointer;
+    }
+  </style>
+
+<script src="jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  $(function (param) { 
+    // get memes
+    $.get("https://api.imgflip.com/get_memes",function (response) { 
+      console.log(response)
+      var data=""
+      $.each(response.data.memes,function (i,v) { 
+        data += `<img src="${v.url}" width="100" height="100" style="padding: 5px;" class="myimage" data-id="${v.id}" data-name="${v.name}" data-bc="${v.box_count}">`
+      })
+      $("#memes").html(data)
+    })
+    
+    // choose memes
+    $("#memes").on("click",".myimage",function (param) {
+      var url = $(this).attr("src");
+      var template_id = $(this).data("id");
+      var name = $(this).data("name");
+      var box_count = $(this).data("bc");
+
+      // console.log(template_id);
+      $("#myphoto").html(`<h2 style="color:white;text-align:center;margin: 20px;">${name}</h2>
+      <img src="${url}" alt="" id="myselectedphoto" width="500px">`)
+
+      data=""
+      for(var i=0; i<box_count; i++){
+        data+=`<input type="text" name="text${i}" class="text${i}" placeholder="Text ${i}"><br>`
+      }
+
+      data +=`<input type="button" value="Generate" id="generate" data-tempid="${template_id}" data-bc="${box_count}">`
+
+      $("#content").html(data)
+    })
+
+    // click generate button
+    $("#content").on("click","#generate",function (param) { 
+      var template_id = $(this).data("tempid")
+      var box_count = $(this).data("bc")
+      var textArr = []
+      for(var i=0; i<box_count; i++){
+        textArr["text"+i] = ($(".text"+i).val())
+      }
+      var data = Object.assign({},textArr);
+      data.template_id = template_id;
+      data.username = "ThetPaingHtut";
+      data.password = "1234!@#$apple";
+      // console.log(data)
+      $.post("https://api.imgflip.com/caption_image",data,function (response) { 
+        // console.log(response)
+
+        // var img = `<img src="${response.data.url}" width="500">`
+        // $("#memes").html(img)
+
+        Swal.fire({
+          // title: 'Sweet!',
+          // text: 'Modal with a custom image.',
+          imageUrl: response.data.url,
+          imageWidth: 400,
+          // imageHeight: 200,
+          html: `<a download="custom-filename.jpg" href="${response.data.url}" title="ImageName">
+              <button>Download</button>
+          </a>`,
+          imageAlt: 'Custom image',
+        })
+      })
+    })
+  })
+</script>
+</head>
+<body>
+  
+  <div id="memes">
+    <!-- scrollable -->
+  </div>
+
+  <div id="creator">
+    <div id="myphoto"></div>
+    <div id="content"></div>
+  </div>
+</body>
+</html>
